@@ -26,12 +26,17 @@
   [& args]
   ; (msg1)
   (let [
-    column-names ["Name" "Price"]
-    rows ["Foo Widget" 100]
+    column-names ["c1" "c2"]
+    rows [
+      ["v1" 1]
+      ["v2" 2]
+    ]
     wb (spreadsheet/create-workbook "Price List"
-    [["Name" "Price"]
-     ["Foo Widget" 100]
-     ["Bar Widget" 200]])
+    ; [["Name" "Price"]
+    ;  ["Foo Widget" 100]
+    ;  ["Bar Widget" 200]]
+    (cons (mapv name column-names) rows)
+     )
     ; sheet (spreadsheet/select-sheet "Price List" wb)
     ; header-row (first (spreadsheet/row-seq sheet))
     ]
