@@ -1,6 +1,7 @@
 (ns clj-pdf-metabase.core
-  (:use clj-pdf.core)
-  (:require [dk.ative.docjure.spreadsheet :as spreadsheet])
+  ; (:use clj-pdf.core)
+  (:require [dk.ative.docjure.spreadsheet :as spreadsheet]
+    [clj-pdf.core :as pdf])
   (:gen-class))
 
   
@@ -21,6 +22,12 @@
     [:pdf-table column-widths]
     (map (partial map (fn [element] [:pdf-cell element])) rows)))
 
+(defn tableCreator[column-names & rows]
+  ; (println column-names)
+  ; (println rows)
+  [:table rows]
+  )
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
@@ -28,8 +35,9 @@
   (let [
     column-names ["c1" "c2"]
     rows [
-      ["v1" 1]
-      ["v2" 2]
+      ["v1" "v12"]
+      ["v2" "v22"]
+      ["v3" "v32"]
     ]
     wb (spreadsheet/create-workbook "Price List"
     ; [["Name" "Price"]
@@ -42,9 +50,29 @@
     ]
     ; (spreadsheet/set-row-style! header-row (spreadsheet/create-cell-style! wb {:background :yellow,
     ;                               :font {:bold true}}))
-    (spreadsheet/save-workbook! "foo.xlsx" wb))
+    (spreadsheet/save-workbook! "foo.xlsx" wb)
+    ; (tableCreator column-names rows)
+  ; (apply tableCreator rows)
+    (pdf/pdf [
+      {:orientation :landscape}
+
+      ; (apply tableCreator rows)
+      [:table ["v1" "v12"]
+      ["v2" "v22"]
+      ["v3" "v32"]]
+
+      ; (let [[i1 & all] rows]
+      ;   [:table all]
+      ; )
+
+    ]
+     
+    
+      "foo.pdf")
+    )
 
   (println "Starting...")
+  ; (-m21)
   ; (pdf
   ;   [{}
   ;    [:list {:roman true}
@@ -55,16 +83,7 @@
   ;    [:phrase "some more text"]
   ;    [:paragraph "yet more text"]]
   ;   "doc.pdf")
-  (pdf [
-    {:orientation :landscape}
-    ; [:table {:header ["Name" "ID" "Make" "Model" "Year"]}]
-    ; ]
-    [:table      
-    {:header ["c1" "c2" "c3"]}
-      ["v11" "v12" "v13"]
-      ["v21" "v22" "v23"]]
-  ]
-    "foo.pdf")
+  
 
   ; (pdf-table 
   ;   [10 20 15]
