@@ -2,6 +2,7 @@
   ; (:use clj-pdf.core)
   (:require [dk.ative.docjure.spreadsheet :as spreadsheet]
     [clj-pdf.core :as pdf])
+  (:import [java.io ByteArrayInputStream ByteArrayOutputStream File])
   (:gen-class))
 
   
@@ -28,10 +29,14 @@
   [:table rows]
   )
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  ; (msg1)
+(defn -m21[]
+
+  (println "In m21...")
+  
+  )
+
+(defn -ExcelCreation[]
+
   (let [
     column-names ["c1" "c2"]
     rows [
@@ -71,8 +76,87 @@
       "foo.pdf")
     )
 
+  )
+
+(defn -PdfCreation[]
+  (def out (ByteArrayOutputStream.))
+  (pdf/pdf [{} "first document"] out)
+  (ByteArrayInputStream. (.toByteArray out))
+  (println "PDF creation done...")
+  )
+
+(defn -PdfFile[]
+
+  (def column-names ["c1" "c2"])
+  (def rows [
+    ["v1" "v12"]
+    ["v2" "v22"]
+    ["v3" "v32"]
+    ; [1 2]
+    ; [3 4]
+    ; [4 5]
+  ]) 
+
+  ; (for [x (range 1 10)]
+  ;   (do (println x) x))
+
+  ; (loop [x 10]
+  ;   (when (> x 1)
+  ;      (println x)
+  ;      (recur (- x 2))))
+
+  (pdf/pdf [
+    {:orientation :landscape}
+
+    ; (apply tableCreator rows)
+    ; [:table (flatten rows)]
+
+    (into
+      [:table {:header column-names}]
+       (for [row rows]
+         [
+          
+         
+        ;  (let [[c1 c2] row]            
+        ;     [:cell c1])
+        ; [:cell "c1"]
+        ; [:cell "c2"]
+      (into      
+        
+        [:cell]
+        (for [c row]
+          c)
+        
+        
+      )]))
+          
+      ; (for [c row]
+      ;     [:cell c])
+          
+          
+      ;       ]))
+    
+    ; (let [[i1 & all] rows]
+    ;   [:table all]
+    ; )
+
+  ]
+    "foo.pdf")
+  
+
+  
+  )
+
+(defn -main
+  "I don't do a whole lot ... yet."
+  [& args]
   (println "Starting...")
+  (-PdfFile)
   ; (-m21)
+  ; (-ExcelCreation)
+  ; (def a "a1")
+  ; (println a)
+  ; (-PdfCreation)
   ; (pdf
   ;   [{}
   ;    [:list {:roman true}
@@ -84,6 +168,7 @@
   ;    [:paragraph "yet more text"]]
   ;   "doc.pdf")
   
+
 
   ; (pdf-table 
   ;   [10 20 15]
